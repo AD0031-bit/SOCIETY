@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Mentorship | THE SOCIETY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .mentor-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .mentor-card:hover {
+            border-color: rgba(140, 175, 200, 0.35);
+        }
+
+        .request-item {
+            background: rgba(10, 25, 40, 0.65);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .status-badge {
+            font-size: 0.78rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .status-pending {
+            background: rgba(234, 179, 8, 0.2);
+            color: #facc15;
+            border: 1px solid rgba(234, 179, 8, 0.4);
+        }
+
+        .status-accepted {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            border: 1px solid rgba(74, 222, 128, 0.4);
+        }
+
+        .status-completed {
+            background: rgba(90, 160, 208, 0.2);
+            color: #8ec8f0;
+            border: 1px solid rgba(90, 160, 208, 0.4);
+        }
+
+        .status-declined {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="societyHeader"></header>
+
+    <main class="app-page">
+
+        <div class="page-header">
+            <div>
+                <span class="hero-tagline">3-TIER GUIDANCE</span>
+                <h1>Smart <em>Mentorship</em></h1>
+                <p>Connect with peers, experienced seniors, and industry alumni to accelerate your growth.</p>
+            </div>
+            <a href="dashboard.html" class="secondary-btn">← Back to Dashboard</a>
+        </div>
+
+        <!-- Mentorship Tabs -->
+        <div class="tab-container">
+            <button class="tab-btn active" id="tabBrowse" onclick="switchTab('browse')">Browse Mentors</button>
+            <button class="tab-btn" id="tabDashboard" onclick="switchTab('dashboard')">My Mentorship Requests</button>
+        </div>
+
+        <!-- Section 1: Browse Mentors -->
+        <div id="sectionBrowse">
+            <div class="filter-bar">
+                <input
+                    type="text"
+                    id="searchTopic"
+                    class="search-input-box"
+                    placeholder="Search by topic (e.g. DSA, Off-Campus, Resume, System Design, Hackathons)..."
+                >
+
+                <select id="mentorRoleFilter" class="select-box">
+                    <option value="">All Mentors</option>
+                    <option value="senior">Seniors (Placements & Internships)</option>
+                    <option value="alumni">Alumni (Industry & Referrals)</option>
+                </select>
+            </div>
+
+            <div id="mentorsGrid" class="cards-grid">
+                <p style="color: var(--text-secondary); grid-column: 1 / -1;">Loading available mentors...</p>
+            </div>
+        </div>
+
+        <!-- Section 2: Mentorship Dashboard -->
+        <div id="sectionDashboard" style="display: none;">
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-size: 1.3rem; margin-bottom: 6px; font-weight: 500;">Your Mentorship Activity</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">Review incoming guidance requests and monitor sessions.</p>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <h4 style="font-size: 1rem; color: #8da8bb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+                    Incoming Requests (As Mentor)
+                </h4>
+                <div id="incomingRequests">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Loading incoming requests...</p>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="font-size: 1rem; color: #8da8bb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+                    Sent Requests (As Mentee)
+                </h4>
+                <div id="sentRequests">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Loading sent requests...</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Request Mentorship Modal -->
+    <div id="requestModal" class="modal-backdrop">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeRequestModal()">&times;</button>
+            <h2>Request <em>Mentorship</em></h2>
+            <p class="subtitle" id="modalMentorSubtitle">Connecting with mentor</p>
+
+            <form id="mentorshipForm">
+                <input type="hidden" id="formMentorId">
+
+                <div class="form-group">
+                    <label for="formTopic">Guidance Topic / Focus Area</label>
+                    <input type="text" id="formTopic" placeholder="e.g. DSA Preparation, Resume Review, Off-Campus Referrals" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="formMessage">What specific guidance are you looking for?</label>
+                    <textarea id="formMessage" placeholder="Introduce yourself, your current year, branch, and 2-3 specific questions or topics you'd like guidance on..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="formPreferredTime">Preferred Schedule / Availability</label>
+                    <input type="text" id="formPreferredTime" placeholder="e.g. Weekends after 5 PM, or Google Meet link">
+                </div>
+
+                <div id="requestStatus" style="font-size: 0.9rem; margin-top: 10px;"></div>
+
+                <div class="btn-row">
+                    <button type="button" class="secondary-btn" onclick="closeRequestModal()">Cancel</button>
+                    <button type="submit" class="primary-btn">Submit Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/navbar.js"></script>
+    <script>
+        let mentorsList = [];
+        const token = localStorage.getItem("societyToken") || "";
+        const currentUser = JSON.parse(localStorage.getItem("societyUser") || "{}");
+
+        function switchTab(tab) {
+            const btnBrowse = document.getElementById("tabBrowse");
+            const btnDash = document.getElementById("tabDashboard");
+            const secBrowse = document.getElementById("sectionBrowse");
+            const secDash = document.getElementById("sectionDashboard");
+
+            if (tab === "browse") {
+                btnBrowse.classList.add("active");
+                btnDash.classList.remove("active");
+                secBrowse.style.display = "block";
+                secDash.style.display = "none";
+                fetchMentors();
+            } else {
+                btnDash.classList.add("active");
+                btnBrowse.classList.remove("active");
+                secBrowse.style.display = "none";
+                secDash.style.display = "block";
+                loadDashboardRequests();
+            }
+        }
+
+        async function fetchMentors() {
+            const topic = document.getElementById("searchTopic").value.trim();
+            const role = document.getElementById("mentorRoleFilter").value;
+            const grid = document.getElementById("mentorsGrid");
+            grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1;">Searching mentors...</p>';
+
+            const params = new URLSearchParams();
+            if (topic) params.append("topic", topic);
+            if (role) params.append("role", role);
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/mentorship/mentors?${params.toString()}`);
+                const data = await res.json();
+
+                if (res.ok) {
+                    mentorsList = data.mentors || [];
+                    renderMentors(mentorsList);
+                } else {
+                    grid.innerHTML = '<p style="color: #f87171; grid-column: 1 / -1;">Failed to load mentors.</p>';
+                }
+            } catch (err) {
+                console.error("Mentors fetch error:", err);
+                grid.innerHTML = '<p style="color: #f87171; grid-column: 1 / -1;">Server unreachable.</p>';
+            }
+        }
+
+        function renderMentors(mentors) {
+            const grid = document.getElementById("mentorsGrid");
+            grid.innerHTML = "";
+
+            if (mentors.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border);">
+                        <p style="font-size: 1.1rem; color: var(--text-secondary);">No mentors currently found matching this filter.</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 6px;">Try clearing filters or search for topics like "DSA" or "Resume".</p>
+                    </div>
+                `;
+                return;
+            }
+
+            mentors.forEach(m => {
+                const card = document.createElement("div");
+                card.className = "mentor-card";
+
+                const topicsHtml = (m.mentorTopics || ["Career Guidance", "Placements"])
+                    .map(t => `<span class="topic-tag">${t}</span>`).join("");
+
+                const initial = m.name ? m.name.charAt(0).toUpperCase() : "M";
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #174a6e, #002147); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; color: #fff;">
+                                    ${initial}
+                                </div>
+                                <div>
+                                    <h3 style="font-size: 1.15rem; margin: 0; font-weight: 500;">${m.name}</h3>
+                                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
+                                        ${m.branch || 'CSE'} · Class of ${m.gradYear || '2026'}
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="user-role-badge">${(m.role || 'Senior').toUpperCase()}</span>
+                        </div>
+
+                        <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 10px 0 14px; line-height: 1.6;">
+                            ${m.mentorBio || m.bio || 'Available to guide college juniors in academics, internships, and technical roadmaps.'}
+                        </p>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;">
+                            ${topicsHtml}
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <span style="font-size: 0.8rem; color: #facc15; font-weight: 600;">⭐ ${m.reputation || 0} pts</span>
+                        <button class="primary-btn" style="padding: 7px 15px; font-size: 0.85rem;" onclick="openRequestModal('${m.id}', '${m.name}', '${m.role}')">
+                            Request Mentorship →
+                        </button>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function openRequestModal(mentorId, mentorName, mentorRole) {
+            document.getElementById("formMentorId").value = mentorId;
+            document.getElementById("modalMentorSubtitle").textContent = `Requesting guidance from ${mentorName} (${mentorRole.toUpperCase()})`;
+            document.getElementById("requestStatus").textContent = "";
+            document.getElementById("requestModal").classList.add("show");
+        }
+
+        function closeRequestModal() {
+            document.getElementById("requestModal").classList.remove("show");
+        }
+
+        document.getElementById("mentorshipForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const statusEl = document.getElementById("requestStatus");
+            statusEl.textContent = "Sending request...";
+            statusEl.style.color = "var(--text-secondary)";
+
+            const payload = {
+                mentorId: document.getElementById("formMentorId").value,
+                topic: document.getElementById("formTopic").value.trim(),
+                message: document.getElementById("formMessage").value.trim(),
+                preferredTime: document.getElementById("formPreferredTime").value.trim()
+            };
+
+            try {
+                const res = await fetch("http://localhost:5000/api/mentorship/request", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    statusEl.textContent = "Mentorship request sent successfully!";
+                    statusEl.style.color = "#4ade80";
+                    setTimeout(() => {
+                        closeRequestModal();
+                        document.getElementById("mentorshipForm").reset();
+                        switchTab("dashboard");
+                    }, 800);
+                } else {
+                    statusEl.textContent = data.message || "Failed to submit request.";
+                    statusEl.style.color = "#f87171";
+                }
+            } catch (err) {
+                console.error("Submit mentorship error:", err);
+                statusEl.textContent = "Failed to connect to the server.";
+                statusEl.style.color = "#f87171";
+            }
+        });
+
+        async function loadDashboardRequests() {
+            const incomingEl = document.getElementById("incomingRequests");
+            const sentEl = document.getElementById("sentRequests");
+
+            incomingEl.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.9rem;">Loading...</p>';
+            sentEl.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.9rem;">Loading...</p>';
+
+            try {
+                const res = await fetch("http://localhost:5000/api/mentorship/my-requests", {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    incomingEl.innerHTML = '<p style="color: #f87171;">Failed to load requests.</p>';
+                    return;
+                }
+
+                // Incoming (As Mentor)
+                const incoming = data.asMentor || [];
+                if (incoming.length === 0) {
+                    incomingEl.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">No incoming mentorship requests at this time.</p>';
+                } else {
+                    incomingEl.innerHTML = "";
+                    incoming.forEach(req => {
+                        const div = document.createElement("div");
+                        div.className = "request-item";
+                        div.innerHTML = `
+                            <div style="flex: 1; min-width: 250px;">
+                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 6px;">
+                                    <h4 style="font-size: 1.05rem; margin: 0;">${req.topic}</h4>
+                                    <span class="status-badge status-${req.status}">${req.status}</span>
+                                </div>
+                                <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 6px;">
+                                    From: <strong>${req.menteeName}</strong> (${req.menteeRole.toUpperCase()}) · Preferred: ${req.preferredTime || 'Flexible'}
+                                </p>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px;">
+                                    "${req.message}"
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                ${req.status === 'pending' ? `
+                                    <button class="primary-btn" style="padding: 7px 14px; font-size: 0.82rem;" onclick="updateStatus('${req.id}', 'accepted')">Accept</button>
+                                    <button class="secondary-btn" style="padding: 7px 14px; font-size: 0.82rem;" onclick="updateStatus('${req.id}', 'declined')">Decline</button>
+                                ` : ''}
+                                ${req.status === 'accepted' ? `
+                                    <button class="primary-btn" style="padding: 7px 14px; font-size: 0.82rem; background: #059669;" onclick="updateStatus('${req.id}', 'completed')">Mark Completed (+25 pts)</button>
+                                ` : ''}
+                            </div>
+                        `;
+                        incomingEl.appendChild(div);
+                    });
+                }
+
+                // Sent (As Mentee)
+                const sent = data.asMentee || [];
+                if (sent.length === 0) {
+                    sentEl.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">You have not sent any mentorship requests yet.</p>';
+                } else {
+                    sentEl.innerHTML = "";
+                    sent.forEach(req => {
+                        const div = document.createElement("div");
+                        div.className = "request-item";
+                        div.innerHTML = `
+                            <div style="flex: 1;">
+                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 6px;">
+                                    <h4 style="font-size: 1.05rem; margin: 0;">${req.topic}</h4>
+                                    <span class="status-badge status-${req.status}">${req.status}</span>
+                                </div>
+                                <p style="font-size: 0.88rem; color: var(--text-secondary);">
+                                    Mentor: <strong>${req.mentorName}</strong> (${req.mentorRole.toUpperCase()})
+                                </p>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+                                    "${req.message}"
+                                </p>
+                                ${req.notes ? `<p style="font-size: 0.82rem; color: #4ade80; margin-top: 4px;"><strong>Note:</strong> ${req.notes}</p>` : ''}
+                            </div>
+                        `;
+                        sentEl.appendChild(div);
+                    });
+                }
+
+            } catch (err) {
+                console.error("Load dashboard requests error:", err);
+            }
+        }
+
+        async function updateStatus(id, status) {
+            try {
+                const res = await fetch(`http://localhost:5000/api/mentorship/${id}/status`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ status })
+                });
+
+                if (res.ok) {
+                    loadDashboardRequests();
+                } else {
+                    alert("Failed to update status");
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Check query params (e.g., if redirected from network.html with ?mentorId=xxx)
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const preselectedMentor = urlParams.get("mentorId");
+            if (preselectedMentor) {
+                fetchMentors().then(() => {
+                    const m = mentorsList.find(item => item.id === preselectedMentor);
+                    if (m) openRequestModal(m.id, m.name, m.role);
+                });
+            } else {
+                fetchMentors();
+            }
+
+            // Debounced topic search
+            let debounce;
+            document.getElementById("searchTopic").addEventListener("input", () => {
+                clearTimeout(debounce);
+                debounce = setTimeout(fetchMentors, 300);
+            });
+            document.getElementById("mentorRoleFilter").addEventListener("change", fetchMentors);
+        });
+    </script>
+
+</body>
+
+</html>

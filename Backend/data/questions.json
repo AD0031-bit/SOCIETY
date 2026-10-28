@@ -1,0 +1,97 @@
+[
+  {
+    "id": "q-1793185149095",
+    "upvotes": 0,
+    "views": 1,
+    "answers": [
+      {
+        "id": "ans-1793185149104",
+        "upvotes": 0,
+        "isAccepted": false,
+        "createdAt": "2026-10-28T10:59:09.104Z",
+        "content": "For a 24-36hr hackathon, always stick to a monolithic backend (like a single Express app or Next.js API routes) to avoid distributed tracing and network latency overhead!",
+        "authorName": "Test Developer",
+        "authorRole": "student",
+        "authorId": "user-1793185148986"
+      }
+    ],
+    "createdAt": "2026-10-28T10:59:09.095Z",
+    "title": "What are the key differences between monolithic and microservice architecture for hackathons?",
+    "category": "Hackathons & Competitions",
+    "tags": [
+      "Architecture",
+      "Hackathons",
+      "Backend"
+    ],
+    "authorName": "Test Developer",
+    "authorRole": "student",
+    "authorId": "user-1793185148986"
+  },
+  {
+    "id": "q-1",
+    "title": "How should a 2nd year student prepare for off-campus Tier-1 internships?",
+    "category": "Placements & Internships",
+    "tags": [
+      "DSA",
+      "Resume",
+      "Off-Campus",
+      "Internship"
+    ],
+    "authorName": "Karan Patel",
+    "authorRole": "Student",
+    "authorId": "student-temp",
+    "upvotes": 24,
+    "views": 182,
+    "answers": [
+      {
+        "id": "ans-1",
+        "authorName": "Rahul Sharma",
+        "authorRole": "Senior",
+        "authorId": "user-1",
+        "content": "1. Focus heavily on Striver's SDE Sheet and LeetCode Mediums (Arrays, DP, Graphs).\n2. Build 2 deep projects rather than 5 generic to-do apps.\n3. Keep your LinkedIn active and start connecting with alumni 4 months before drive season.",
+        "upvotes": 18,
+        "isAccepted": true,
+        "createdAt": "2026-10-28T10:48:29.239Z"
+      },
+      {
+        "id": "ans-2",
+        "authorName": "Ananya Mehta",
+        "authorRole": "Alumni @ Microsoft",
+        "authorId": "user-2",
+        "content": "Don't ignore Computer Fundamentals (OS, DBMS, Computer Networks). In 3rd year interviews, the difference between an offer and rejection is often how well you explain process vs thread and ACID properties.",
+        "upvotes": 14,
+        "isAccepted": false,
+        "createdAt": "2026-10-28T10:48:29.239Z"
+      }
+    ],
+    "createdAt": "2026-10-28T10:48:29.239Z"
+  },
+  {
+    "id": "q-2",
+    "title": "Which tech stack is best for winning college hackathons in 2026/2027?",
+    "category": "Hackathons",
+    "tags": [
+      "Hackathons",
+      "Tech Stack",
+      "Rapid Prototyping"
+    ],
+    "authorName": "Sneha Roy",
+    "authorRole": "Student",
+    "authorId": "student-temp-2",
+    "upvotes": 16,
+    "views": 110,
+    "answers": [
+      {
+        "id": "ans-3",
+        "authorName": "Arjun Verma",
+        "authorRole": "Senior",
+        "authorId": "user-3",
+        "content": "Next.js / Supabase / Tailwind for frontend and DB, plus Gemini API or HuggingFace for rapid AI integration. Judges look at UI polish and problem-solution fit far more than complex backend infrastructure in 24 hours.",
+        "upvotes": 11,
+        "isAccepted": true,
+        "createdAt": "2026-10-28T10:48:29.239Z"
+      }
+    ],
+    "createdAt": "2026-10-28T10:48:29.239Z"
+  }
+]

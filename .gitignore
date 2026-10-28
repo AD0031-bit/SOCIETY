@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Environment Variables & Secrets
+.env
+.env.*
+Backend/.env
+Backend/.env.*
+!.env.example
+!Backend/.env.example
+
+# SQLite Database journals
+*.db-journal
+*.db-wal
+
+# Logs & System
+*.log
+.DS_Store
+Thumbs.db

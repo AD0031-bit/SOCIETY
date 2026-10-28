@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | THE SOCIETY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .dashboard-page {
+            min-height: 100vh;
+            padding: 120px 6% 60px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .welcome-section {
+            margin-bottom: 40px;
+        }
+
+        .welcome-section h1 {
+            font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+            font-weight: 400;
+            margin: 6px 0 12px;
+        }
+
+        .welcome-section h1 em {
+            font-style: italic;
+            color: #8da8bb;
+        }
+
+        .profile-hero-card {
+            background: rgba(10, 28, 44, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 30px;
+            backdrop-filter: blur(16px);
+            margin-bottom: 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .profile-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .badge-pill {
+            background: rgba(90, 160, 208, 0.15);
+            border: 1px solid rgba(130, 190, 230, 0.3);
+            color: #9ccae8;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 22px;
+            margin-top: 20px;
+        }
+
+        .feature-card-btn {
+            display: inline-block;
+            margin-top: 16px;
+            color: #8da8bb;
+            font-size: 0.92rem;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .feature-card-btn:hover {
+            color: #ffffff;
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Unified Navbar -->
+    <header id="societyHeader"></header>
+
+    <main class="dashboard-page">
+
+        <!-- Welcome Header -->
+        <section class="welcome-section">
+            <span class="hero-tagline">THE SOCIETY PLATFORM</span>
+            <h1>Welcome back, <em id="welcomeName">Member</em>.</h1>
+            <p>Your college network, mentorship hub, and opportunities portal.</p>
+        </section>
+
+        <!-- Profile Overview Card -->
+        <section class="profile-hero-card">
+            <div class="profile-info">
+                <h2 id="profileName">Loading...</h2>
+                <p id="profileSub" style="color: var(--text-secondary); margin-bottom: 8px;">Role · Branch · College</p>
+                <p id="profileBio" style="color: var(--text-muted); font-size: 0.94rem; max-width: 600px; line-height: 1.6;">
+                    Loading your profile details...
+                </p>
+                <div class="profile-badges" id="profileBadges"></div>
+            </div>
+
+            <div style="text-align: right; min-width: 200px;">
+                <div style="font-size: 2.2rem; font-weight: 700; color: #facc15;" id="reputationPoints">0</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">
+                    Reputation Points
+                </div>
+                <a href="profile.html" class="secondary-btn" style="padding: 9px 18px; font-size: 0.88rem;">Edit Profile & Skills →</a>
+            </div>
+        </section>
+
+        <!-- Quick Platform Stats -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <span class="stat-num" id="statMembers">0</span>
+                <span class="stat-label">Active Members</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num" id="statMentors">0</span>
+                <span class="stat-label">Verified Mentors</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num" id="statOpportunities">0</span>
+                <span class="stat-label">Opportunities</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num" id="statProjects">0</span>
+                <span class="stat-label">Active Teams</span>
+            </div>
+        </div>
+
+        <h2 style="font-size: 1.6rem; font-weight: 400; margin: 40px 0 16px;">Explore <em>Society Modules</em></h2>
+
+        <!-- Feature Modules Grid -->
+        <section class="dashboard-grid">
+
+            <!-- 1. Network -->
+            <div class="app-card">
+                <div class="card-top">
+                    <span class="hero-tagline" style="margin-bottom: 8px;">Directory</span>
+                    <h3 class="card-title">Community Network</h3>
+                    <p class="card-body">Discover seniors, alumni, and peers. Filter by branch, graduation year, or specific technical skills.</p>
+                </div>
+                <a href="network.html" class="feature-card-btn">Search Network →</a>
+            </div>
+
+            <!-- 2. Mentorship -->
+            <div class="app-card">
+                <div class="card-top">
+                    <span class="hero-tagline" style="margin-bottom: 8px;">Guidance</span>
+                    <h3 class="card-title">Smart Mentorship</h3>
+                    <p class="card-body">Find mentors for DSA, placement prep, resume feedback, and career roadmaps. Send requests and track status.</p>
+                </div>
+                <a href="mentorship.html" class="feature-card-btn">Find a Mentor →</a>
+            </div>
+
+            <!-- 3. Opportunities -->
+            <div class="app-card">
+                <div class="card-top">
+                    <span class="hero-tagline" style="margin-bottom: 8px;">Careers</span>
+                    <h3 class="card-title">Opportunities & Referrals</h3>
+                    <p class="card-body">Discover verified internships, open roles, and direct referrals posted by college alumni and seniors.</p>
+                </div>
+                <a href="opportunities.html" class="feature-card-btn">View Opportunities →</a>
+            </div>
+
+            <!-- 4. Projects -->
+            <div class="app-card">
+                <div class="card-top">
+                    <span class="hero-tagline" style="margin-bottom: 8px;">Collaborate</span>
+                    <h3 class="card-title">Hackathon Team Builder</h3>
+                    <p class="card-body">Find developers, ML specialists, and designers for hackathons or build collaborative open-source projects.</p>
+                </div>
+                <a href="projects.html" class="feature-card-btn">Explore Projects →</a>
+            </div>
+
+            <!-- 5. Q&A -->
+            <div class="app-card">
+                <div class="card-top">
+                    <span class="hero-tagline" style="margin-bottom: 8px;">Knowledge</span>
+                    <h3 class="card-title">Community Q&A</h3>
+                    <p class="card-body">Ask questions about interview loops, subject preparation, or off-campus hiring. Answer queries to earn reputation.</p>
+                </div>
+                <a href="qa.html" class="feature-card-btn">Join Discussions →</a>
+            </div>
+
+            <!-- 6. Profile & Settings -->
+            <div class="app-card">
+                <div class="card-top">
+                    <span class="hero-tagline" style="margin-bottom: 8px;">Identity</span>
+                    <h3 class="card-title">Profile & Mentorship Settings</h3>
+                    <p class="card-body">Update your tech skills, social profiles (GitHub/LinkedIn), and toggle your availability to mentor junior students.</p>
+                </div>
+                <a href="profile.html" class="feature-card-btn">Manage Profile →</a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="js/navbar.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const rawUser = localStorage.getItem("societyUser");
+            if (!rawUser) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            let user = JSON.parse(rawUser);
+
+            // Fetch freshest profile info
+            if (window.SocietyAuth) {
+                user = await window.SocietyAuth.refreshUser();
+            }
+
+            // Populate profile header
+            document.getElementById("welcomeName").textContent = user.name;
+            document.getElementById("profileName").textContent = user.name;
+            document.getElementById("profileSub").textContent =
+                `${user.role ? user.role.toUpperCase() : 'MEMBER'} · ${user.branch || 'CSE'} (${user.gradYear || '2027'}) · ${user.college || 'Engineering College'}`;
+
+            document.getElementById("profileBio").textContent = user.bio ||
+                "No bio added yet. Click 'Edit Profile' to showcase your projects, skills, and interests.";
+
+            document.getElementById("reputationPoints").textContent = user.reputation || 0;
+
+            // Badges
+            const badgesContainer = document.getElementById("profileBadges");
+            badgesContainer.innerHTML = "";
+            const badges = user.badges && user.badges.length ? user.badges : ["New Member"];
+            badges.forEach(b => {
+                const span = document.createElement("span");
+                span.className = "badge-pill";
+                span.textContent = b;
+                badgesContainer.appendChild(span);
+            });
+
+            // Load live statistics
+            try {
+                const [uRes, mRes, oRes, pRes] = await Promise.all([
+                    fetch("http://localhost:5000/api/users"),
+                    fetch("http://localhost:5000/api/mentorship/mentors"),
+                    fetch("http://localhost:5000/api/opportunities"),
+                    fetch("http://localhost:5000/api/projects")
+                ]);
+
+                if (uRes.ok) {
+                    const data = await uRes.json();
+                    document.getElementById("statMembers").textContent = data.count || 0;
+                }
+                if (mRes.ok) {
+                    const data = await mRes.json();
+                    document.getElementById("statMentors").textContent = data.count || 0;
+                }
+                if (oRes.ok) {
+                    const data = await oRes.json();
+                    document.getElementById("statOpportunities").textContent = data.count || 0;
+                }
+                if (pRes.ok) {
+                    const data = await pRes.json();
+                    document.getElementById("statProjects").textContent = data.count || 0;
+                }
+            } catch (err) {
+                console.error("Failed to load platform stats:", err);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

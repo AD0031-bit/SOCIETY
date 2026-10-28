@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings | THE SOCIETY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .profile-container {
+            max-width: 900px;
+            margin: auto;
+            padding: 120px 6% 60px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sidebar-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 26px;
+            backdrop-filter: blur(14px);
+            text-align: center;
+        }
+
+        .profile-avatar-circle {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #174a6e, #002147);
+            border: 2px solid rgba(130, 190, 230, 0.4);
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            color: #ffffff;
+        }
+
+        .edit-form-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 32px;
+            backdrop-filter: blur(14px);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: var(--text);
+            margin: 14px 0;
+            font-size: 0.95rem;
+        }
+
+        .checkbox-label input {
+            width: 18px;
+            height: 18px;
+            accent-color: #5aa0d0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="societyHeader"></header>
+
+    <main class="profile-container">
+
+        <div class="page-header">
+            <div>
+                <span class="hero-tagline">USER IDENTITY</span>
+                <h1>Profile & <em>Reputation</em></h1>
+                <p>Keep your technical skills and mentorship availability up to date.</p>
+            </div>
+            <a href="dashboard.html" class="secondary-btn">← Back to Dashboard</a>
+        </div>
+
+        <div class="profile-grid">
+
+            <!-- Sidebar Info -->
+            <div class="sidebar-card">
+                <div class="profile-avatar-circle" id="avatarInitial">U</div>
+                <h2 style="font-size: 1.4rem; margin-bottom: 4px;" id="sideName">User</h2>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 14px;" id="sideEmail">email@college.edu</p>
+
+                <div style="margin: 18px 0; padding: 14px; background: rgba(0,0,0,0.25); border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="font-size: 1.8rem; font-weight: 700; color: #facc15;" id="sideReputation">0</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;">
+                        Reputation Score
+                    </div>
+                </div>
+
+                <div style="text-align: left; margin-top: 20px;">
+                    <h4 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 8px;">
+                        Earned Badges
+                    </h4>
+                    <div id="sideBadges" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+                </div>
+
+                <div style="text-align: left; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+                    <h4 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 8px;">
+                        Connected Accounts
+                    </h4>
+                    <p style="font-size: 0.88rem; margin-bottom: 6px;">
+                        GitHub: <span id="sideGithub" style="color: #8da8bb;">Not set</span>
+                    </p>
+                    <p style="font-size: 0.88rem;">
+                        LinkedIn: <span id="sideLinkedin" style="color: #8da8bb;">Not set</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Edit Form -->
+            <div class="edit-form-card">
+                <h3 style="font-size: 1.3rem; margin-bottom: 20px; font-weight: 500;">Edit Profile Details</h3>
+
+                <form id="profileForm">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="college">College / University</label>
+                            <input type="text" id="college" placeholder="Engineering College of Technology">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="branch">Branch / Major</label>
+                            <select id="branch" class="select-box" style="width: 100%;">
+                                <option value="CSE">CSE - Computer Science & Engineering</option>
+                                <option value="ECE">ECE - Electronics & Communication</option>
+                                <option value="IT">IT - Information Technology</option>
+                                <option value="EE">EE - Electrical Engineering</option>
+                                <option value="MECH">MECH - Mechanical Engineering</option>
+                                <option value="CIVIL">CIVIL - Civil Engineering</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gradYear">Graduation Year</label>
+                            <input type="text" id="gradYear" placeholder="2027">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bio">Bio / Summary</label>
+                        <textarea id="bio" placeholder="Tell the college community about your interests, past internships, or projects you're working on..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="skills">Technical Skills (comma separated)</label>
+                        <input type="text" id="skills" placeholder="React, Node.js, C++, DSA, Python, Cloud, Docker">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interests">Domains & Interests (comma separated)</label>
+                        <input type="text" id="interests" placeholder="Generative AI, Web3, Hackathons, System Design">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="github">GitHub Profile URL</label>
+                            <input type="url" id="github" placeholder="https://github.com/yourusername">
+                        </div>
+                        <div class="form-group">
+                            <label for="linkedin">LinkedIn Profile URL</label>
+                            <input type="url" id="linkedin" placeholder="https://linkedin.com/in/yourusername">
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 18px; background: rgba(0, 33, 71, 0.25); border-radius: 12px; border: 1px solid var(--border);">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isMentorAvailable">
+                            <span><strong>I am available to mentor junior students</strong> (Show on Mentorship Directory)</span>
+                        </label>
+
+                        <div id="mentorFields" style="display: none; margin-top: 14px;">
+                            <div class="form-group">
+                                <label for="mentorBio">Mentorship Summary / What can you guide with?</label>
+                                <textarea id="mentorBio" placeholder="E.g., Open to review resumes, guide for SIH hackathon, or conduct DSA mock interviews..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="mentorTopics">Mentorship Topics (comma separated)</label>
+                                <input type="text" id="mentorTopics" placeholder="DSA Prep, Resume Feedback, Mock Interview, Hackathons">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="saveStatus" style="margin-top: 16px; font-size: 0.92rem;"></div>
+
+                    <div class="btn-row">
+                        <button type="submit" class="primary-btn" id="saveBtn">Save Profile Changes</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="js/navbar.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const rawUser = localStorage.getItem("societyUser");
+            if (!rawUser) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const token = localStorage.getItem("societyToken") || "";
+            let user = JSON.parse(rawUser);
+
+            if (window.SocietyAuth) {
+                user = await window.SocietyAuth.refreshUser();
+            }
+
+            // Fill sidebar
+            document.getElementById("avatarInitial").textContent = user.name ? user.name.charAt(0).toUpperCase() : "U";
+            document.getElementById("sideName").textContent = user.name;
+            document.getElementById("sideEmail").textContent = user.email;
+            document.getElementById("sideReputation").textContent = user.reputation || 0;
+
+            if (user.github) {
+                document.getElementById("sideGithub").innerHTML = `<a href="${user.github}" target="_blank" style="color: #5aa0d0; text-decoration: underline;">GitHub</a>`;
+            }
+            if (user.linkedin) {
+                document.getElementById("sideLinkedin").innerHTML = `<a href="${user.linkedin}" target="_blank" style="color: #5aa0d0; text-decoration: underline;">LinkedIn</a>`;
+            }
+
+            const badgesContainer = document.getElementById("sideBadges");
+            badgesContainer.innerHTML = "";
+            (user.badges || ["New Member"]).forEach(b => {
+                const span = document.createElement("span");
+                span.className = "badge-pill";
+                span.textContent = b;
+                badgesContainer.appendChild(span);
+            });
+
+            // Fill form inputs
+            document.getElementById("name").value = user.name || "";
+            document.getElementById("college").value = user.college || "";
+            if (user.branch) document.getElementById("branch").value = user.branch;
+            document.getElementById("gradYear").value = user.gradYear || "";
+            document.getElementById("bio").value = user.bio || "";
+            document.getElementById("skills").value = Array.isArray(user.skills) ? user.skills.join(", ") : (user.skills || "");
+            document.getElementById("interests").value = Array.isArray(user.interests) ? user.interests.join(", ") : (user.interests || "");
+            document.getElementById("github").value = user.github || "";
+            document.getElementById("linkedin").value = user.linkedin || "";
+
+            const mentorToggle = document.getElementById("isMentorAvailable");
+            const mentorFields = document.getElementById("mentorFields");
+
+            mentorToggle.checked = !!user.isMentorAvailable;
+            mentorFields.style.display = mentorToggle.checked ? "block" : "none";
+
+            document.getElementById("mentorBio").value = user.mentorBio || "";
+            document.getElementById("mentorTopics").value = Array.isArray(user.mentorTopics) ? user.mentorTopics.join(", ") : (user.mentorTopics || "");
+
+            mentorToggle.addEventListener("change", function () {
+                mentorFields.style.display = this.checked ? "block" : "none";
+            });
+
+            // Save form handler
+            document.getElementById("profileForm").addEventListener("submit", async function (e) {
+                e.preventDefault();
+                const saveStatus = document.getElementById("saveStatus");
+                saveStatus.textContent = "Saving changes...";
+                saveStatus.style.color = "var(--text-secondary)";
+
+                const updatedData = {
+                    name: document.getElementById("name").value.trim(),
+                    college: document.getElementById("college").value.trim(),
+                    branch: document.getElementById("branch").value,
+                    gradYear: document.getElementById("gradYear").value.trim(),
+                    bio: document.getElementById("bio").value.trim(),
+                    skills: document.getElementById("skills").value,
+                    interests: document.getElementById("interests").value,
+                    github: document.getElementById("github").value.trim(),
+                    linkedin: document.getElementById("linkedin").value.trim(),
+                    isMentorAvailable: mentorToggle.checked,
+                    mentorBio: document.getElementById("mentorBio").value.trim(),
+                    mentorTopics: document.getElementById("mentorTopics").value
+                };
+
+                try {
+                    const res = await fetch("http://localhost:5000/api/users/profile", {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify(updatedData)
+                    });
+
+                    const data = await res.json();
+
+                    if (res.ok) {
+                        saveStatus.textContent = "Profile updated successfully!";
+                        saveStatus.style.color = "#4ade80";
+                        localStorage.setItem("societyUser", JSON.stringify(data.user));
+
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 800);
+                    } else {
+                        saveStatus.textContent = data.message || "Failed to update profile";
+                        saveStatus.style.color = "#f87171";
+                    }
+                } catch (err) {
+                    console.error("Save profile error:", err);
+                    saveStatus.textContent = "Failed to connect to the server.";
+                    saveStatus.style.color = "#f87171";
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Join | THE SOCIETY</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(18, 60, 88, 0.35), transparent 35%),
+                radial-gradient(circle at 80% 80%, rgba(0, 33, 71, 0.45), transparent 35%),
+                var(--background);
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 1050px;
+            min-height: 600px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            border: 1px solid rgba(232, 238, 242, 0.12);
+            border-radius: 20px;
+            background: rgba(6, 19, 31, 0.75);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+        }
+
+        .auth-info {
+            padding: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(11, 42, 64, 0.9),
+                    rgba(0, 33, 71, 0.55)
+                );
+        }
+
+        .auth-logo {
+            font-size: 22px;
+            letter-spacing: 2px;
+            margin-bottom: 80px;
+        }
+
+        .auth-info .hero-tagline {
+            margin-bottom: 18px;
+        }
+
+        .auth-info h1 {
+            font-size: 52px;
+            line-height: 1.08;
+            font-weight: 400;
+            margin: 0 0 25px;
+        }
+
+        .auth-info h1 span {
+            font-style: italic;
+        }
+
+        .auth-info p:last-child {
+            max-width: 430px;
+            line-height: 1.8;
+            opacity: 0.75;
+        }
+
+        .auth-form-section {
+            padding: 70px;
+            display: flex;
+            align-items: center;
+            background: rgba(10, 28, 44, 0.5);
+        }
+
+        .auth-form {
+            width: 100%;
+            max-width: 390px;
+            margin: auto;
+        }
+
+        .auth-form h2 {
+            font-size: 34px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .auth-subtitle {
+            opacity: 0.65;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px 16px;
+            border: 1px solid rgba(232, 238, 242, 0.15);
+            border-radius: 8px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 15px;
+            transition: 0.25s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: rgba(232, 238, 242, 0.45);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .form-group select option {
+            background: #06131f;
+            color: #e8eef2;
+        }
+
+        .auth-submit {
+            width: 100%;
+            margin-top: 8px;
+            cursor: pointer;
+            border: none;
+        }
+
+        #registerMessage {
+            min-height: 22px;
+            margin-top: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .auth-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.75;
+        }
+
+        .auth-footer a {
+            color: var(--text);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .back-home {
+            display: block;
+            margin-top: 22px;
+            text-align: center;
+            font-size: 13px;
+            opacity: 0.55;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        @media (max-width: 800px) {
+
+            .auth-container {
+                grid-template-columns: 1fr;
+                max-width: 520px;
+            }
+
+            .auth-info {
+                padding: 45px;
+                min-height: 280px;
+            }
+
+            .auth-logo {
+                margin-bottom: 45px;
+            }
+
+            .auth-info h1 {
+                font-size: 40px;
+            }
+
+            .auth-form-section {
+                padding: 45px;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .auth-page {
+                padding: 20px;
+            }
+
+            .auth-info,
+            .auth-form-section {
+                padding: 32px 25px;
+            }
+
+            .auth-info h1 {
+                font-size: 34px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="auth-page">
+
+        <div class="auth-container">
+
+            <!-- Left side -->
+
+            <section class="auth-info">
+
+                <div class="auth-logo">
+                    <em>THE SOCIETY</em>
+                </div>
+
+                <p class="hero-tagline">
+                    CONNECT. COLLABORATE. CONTRIBUTE.
+                </p>
+
+                <h1>
+                    Be a part<br>
+                    <span>of it.</span>
+                </h1>
+
+                <p>
+                    Join your college community, connect with seniors
+                    and alumni, discover opportunities and contribute
+                    your own knowledge and experience.
+                </p>
+
+            </section>
+
+
+            <!-- Right side -->
+
+            <section class="auth-form-section">
+
+                <div class="auth-form">
+
+                    <h2>Join <em>THE SOCIETY</em></h2>
+
+                    <p class="auth-subtitle">
+                        Create your account and become part of the community.
+                    </p>
+
+                    <form id="registerForm">
+
+                        <div class="form-group">
+
+                            <label for="name">
+                                Full name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Your full name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="email">
+                                Email address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="password">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Create a password"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="role">
+                                I am a
+                            </label>
+
+                            <select id="role" name="role" required>
+
+                                <option value="">
+                                    Select your role
+                                </option>
+
+                                <option value="student">
+                                    Student
+                                </option>
+
+                                <option value="senior">
+                                    Senior
+                                </option>
+
+                                <option value="alumni">
+                                    Alumni
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="primary-btn auth-submit"
+                        >
+                            <b>CREATE ACCOUNT</b>
+                        </button>
+
+                        <p id="registerMessage"></p>
+
+                    </form>
+
+
+                    <div class="auth-footer">
+
+                        Already have an account?
+
+                        <a href="login.html">
+                            Login
+                        </a>
+
+                    </div>
+
+
+                    <a href="index.html" class="back-home">
+                        ← Back to home
+                    </a>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script src="js/register.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Q&A | THE SOCIETY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .qa-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(14px);
+            margin-bottom: 20px;
+            transition: border-color 0.2s ease;
+        }
+
+        .qa-card:hover {
+            border-color: rgba(140, 175, 200, 0.35);
+        }
+
+        .answers-section {
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: none;
+        }
+
+        .answer-card {
+            background: rgba(10, 25, 40, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+        }
+
+        .answer-card.accepted {
+            border-color: rgba(74, 222, 128, 0.4);
+            background: rgba(10, 40, 25, 0.35);
+        }
+
+        .upvote-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .upvote-btn:hover {
+            background: rgba(90, 160, 208, 0.2);
+            border-color: rgba(130, 190, 230, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="societyHeader"></header>
+
+    <main class="app-page">
+
+        <div class="page-header">
+            <div>
+                <span class="hero-tagline">PEER KNOWLEDGE HUB</span>
+                <h1>Community <em>Q&A</em></h1>
+                <p>Ask questions about interview loops, subject preparation, or off-campus hiring. Answer queries to earn reputation.</p>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button class="primary-btn" onclick="openAskModal()">+ Ask a Question</button>
+                <a href="dashboard.html" class="secondary-btn">← Back</a>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <input
+                type="text"
+                id="searchQa"
+                class="search-input-box"
+                placeholder="Search questions by topic, company, or keyword (e.g. DSA, Interview, LeetCode, OS)..."
+            >
+
+            <select id="categoryFilter" class="select-box">
+                <option value="">All Categories</option>
+                <option value="Placements">Placements & Internships</option>
+                <option value="Hackathons">Hackathons & Projects</option>
+                <option value="Academics">College Academics & Subjects</option>
+                <option value="Higher Studies">Higher Studies & GATE/GRE</option>
+            </select>
+        </div>
+
+        <!-- Questions Feed -->
+        <div id="questionsContainer">
+            <p style="color: var(--text-secondary);">Loading discussions...</p>
+        </div>
+
+    </main>
+
+    <!-- Ask Question Modal -->
+    <div id="askModal" class="modal-backdrop">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAskModal()">&times;</button>
+            <h2>Ask the <em>Community</em></h2>
+            <p class="subtitle">Tap into the collective experience of seniors and alumni.</p>
+
+            <form id="askQuestionForm">
+                <div class="form-group">
+                    <label for="qTitle">Your Question *</label>
+                    <input type="text" id="qTitle" placeholder="e.g. Which DSA topics are most frequently asked in Google SWE intern rounds?" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="qCategory">Category *</label>
+                        <select id="qCategory" class="select-box" style="width: 100%;">
+                            <option value="Placements & Internships">Placements & Internships</option>
+                            <option value="Hackathons & Competitions">Hackathons & Competitions</option>
+                            <option value="Academics & Semester Exams">Academics & Semester Exams</option>
+                            <option value="Career & Industry Advice">Career & Industry Advice</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qTags">Tags (comma separated)</label>
+                        <input type="text" id="qTags" placeholder="e.g. DSA, Google, Interview Prep, 3rd Year">
+                    </div>
+                </div>
+
+                <div id="askStatus" style="font-size: 0.9rem; margin-top: 10px;"></div>
+
+                <div class="btn-row">
+                    <button type="button" class="secondary-btn" onclick="closeAskModal()">Cancel</button>
+                    <button type="submit" class="primary-btn">Publish Question</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/navbar.js"></script>
+    <script>
+        const token = localStorage.getItem("societyToken") || "";
+        const currentUser = JSON.parse(localStorage.getItem("societyUser") || "{}");
+        let allQuestions = [];
+
+        async function fetchQuestions() {
+            const search = document.getElementById("searchQa").value.trim();
+            const category = document.getElementById("categoryFilter").value;
+            const container = document.getElementById("questionsContainer");
+            container.innerHTML = '<p style="color: var(--text-secondary);">Searching questions...</p>';
+
+            const params = new URLSearchParams();
+            if (search) params.append("search", search);
+            if (category) params.append("category", category);
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/qa/questions?${params.toString()}`);
+                const data = await res.json();
+
+                if (res.ok) {
+                    allQuestions = data.questions || [];
+                    renderQuestions(allQuestions);
+                } else {
+                    container.innerHTML = '<p style="color: #f87171;">Failed to load questions.</p>';
+                }
+            } catch (err) {
+                console.error("QA fetch error:", err);
+                container.innerHTML = '<p style="color: #f87171;">Server unreachable.</p>';
+            }
+        }
+
+        function renderQuestions(questions) {
+            const container = document.getElementById("questionsContainer");
+            container.innerHTML = "";
+
+            if (questions.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 45px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border);">
+                        <p style="font-size: 1.15rem; color: var(--text-secondary);">No questions found matching this filter.</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 6px;">Have a doubt about placements or projects? Be the first to ask!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            questions.forEach(q => {
+                const card = document.createElement("div");
+                card.className = "qa-card";
+
+                const tagsHtml = (q.tags || []).map(t => `<span class="topic-tag">${t}</span>`).join("");
+                const answersCount = (q.answers || []).length;
+
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <span class="skill-tag" style="background: rgba(90, 160, 208, 0.15); color: #8ec8f0;">${q.category || 'General'}</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">${answersCount} ${answersCount === 1 ? 'Answer' : 'Answers'}</span>
+                    </div>
+
+                    <h3 style="font-size: 1.3rem; margin: 6px 0 10px; font-weight: 500; line-height: 1.4;">${q.title}</h3>
+
+                    <div class="tags-row" style="margin-bottom: 14px;">
+                        ${tagsHtml}
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06);">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <button class="upvote-btn" onclick="upvoteQuestion('${q.id}', this)">
+                                ▲ Upvote <span class="vote-count">${q.upvotes || 0}</span>
+                            </button>
+                            <span style="font-size: 0.82rem; color: var(--text-secondary);">
+                                Asked by: <strong>${q.authorName}</strong> (${(q.authorRole || 'Student').toUpperCase()})
+                            </span>
+                        </div>
+
+                        <button class="secondary-btn" style="padding: 7px 16px; font-size: 0.85rem;" onclick="toggleAnswers('${q.id}')">
+                            ${answersCount > 0 ? 'View & Answer (' + answersCount + ')' : 'Be the first to answer'}
+                        </button>
+                    </div>
+
+                    <!-- Expandable Answers Section -->
+                    <div class="answers-section" id="answers-${q.id}">
+                        <h4 style="font-size: 1rem; color: #8da8bb; margin-bottom: 12px;">Answers</h4>
+                        <div id="answerList-${q.id}">
+                            ${renderAnswerCards(q.id, q.answers || [], q.authorId)}
+                        </div>
+
+                        <!-- Post an Answer Form -->
+                        <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border);">
+                            <textarea id="answerInput-${q.id}" class="form-group" style="width: 100%; min-height: 70px;" placeholder="Write your verified guidance or experience... (+10 reputation earned)"></textarea>
+                            <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+                                <button class="primary-btn" style="padding: 7px 16px; font-size: 0.85rem;" onclick="submitAnswer('${q.id}')">
+                                    Post Answer (+10 pts)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function renderAnswerCards(questionId, answers, questionAuthorId) {
+            if (!answers || answers.length === 0) {
+                return '<p style="color: var(--text-muted); font-size: 0.88rem; font-style: italic;">No answers submitted yet. Be the first to share knowledge!</p>';
+            }
+
+            return answers.map(a => {
+                const isAccepted = !!a.isAccepted;
+                const canAccept = (currentUser.id === questionAuthorId && !isAccepted);
+
+                return `
+                    <div class="answer-card ${isAccepted ? 'accepted' : ''}">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <strong style="font-size: 0.95rem; color: #ffffff;">${a.authorName}</strong>
+                                <span class="user-role-badge">${(a.authorRole || 'Senior').toUpperCase()}</span>
+                                ${isAccepted ? '<span style="color: #4ade80; font-size: 0.82rem; font-weight: 600;">✓ Accepted Answer</span>' : ''}
+                            </div>
+                            <button class="upvote-btn" style="padding: 4px 10px; font-size: 0.78rem;" onclick="upvoteAnswer('${questionId}', '${a.id}', this)">
+                                ▲ ${a.upvotes || 0}
+                            </button>
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; white-space: pre-line;">${a.content}</p>
+                        ${canAccept ? `
+                            <div style="margin-top: 10px; text-align: right;">
+                                <button class="secondary-btn" style="padding: 4px 10px; font-size: 0.78rem; border-color: rgba(74,222,128,0.4); color: #4ade80;" onclick="acceptAnswer('${questionId}', '${a.id}')">
+                                    ✓ Accept as Best Answer (+15 pts)
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function toggleAnswers(questionId) {
+            const section = document.getElementById(`answers-${questionId}`);
+            if (section) {
+                section.style.display = section.style.display === "block" ? "none" : "block";
+            }
+        }
+
+        async function submitAnswer(questionId) {
+            const input = document.getElementById(`answerInput-${questionId}`);
+            const content = input.value.trim();
+
+            if (!content) {
+                alert("Please write an answer before submitting.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/qa/questions/${questionId}/answers`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ content })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    alert("Answer posted successfully! (+10 reputation points earned)");
+                    input.value = "";
+                    fetchQuestions();
+                } else {
+                    alert(data.message || "Failed to post answer");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Failed to submit answer");
+            }
+        }
+
+        async function upvoteQuestion(questionId, btn) {
+            try {
+                const res = await fetch(`http://localhost:5000/api/qa/questions/${questionId}/upvote`, {
+                    method: "POST"
+                });
+                const data = await res.json();
+                if (res.ok && data.upvotes !== undefined) {
+                    const span = btn.querySelector(".vote-count");
+                    if (span) span.textContent = data.upvotes;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function upvoteAnswer(questionId, answerId, btn) {
+            try {
+                const res = await fetch(`http://localhost:5000/api/qa/questions/${questionId}/answers/${answerId}/upvote`, {
+                    method: "POST"
+                });
+                const data = await res.json();
+                if (res.ok && data.upvotes !== undefined) {
+                    btn.innerHTML = `▲ ${data.upvotes}`;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function acceptAnswer(questionId, answerId) {
+            try {
+                const res = await fetch(`http://localhost:5000/api/qa/questions/${questionId}/answers/${answerId}/accept`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (res.ok) {
+                    alert("Answer accepted as best answer!");
+                    fetchQuestions();
+                } else {
+                    alert("Only the question author can accept an answer");
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function openAskModal() {
+            document.getElementById("askStatus").textContent = "";
+            document.getElementById("askModal").classList.add("show");
+        }
+
+        function closeAskModal() {
+            document.getElementById("askModal").classList.remove("show");
+        }
+
+        document.getElementById("askQuestionForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const statusEl = document.getElementById("askStatus");
+            statusEl.textContent = "Publishing question...";
+            statusEl.style.color = "var(--text-secondary)";
+
+            const payload = {
+                title: document.getElementById("qTitle").value.trim(),
+                category: document.getElementById("qCategory").value,
+                tags: document.getElementById("qTags").value.trim()
+            };
+
+            try {
+                const res = await fetch("http://localhost:5000/api/qa/questions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    statusEl.textContent = "Question published successfully!";
+                    statusEl.style.color = "#4ade80";
+                    setTimeout(() => {
+                        closeAskModal();
+                        document.getElementById("askQuestionForm").reset();
+                        fetchQuestions();
+                    }, 800);
+                } else {
+                    statusEl.textContent = data.message || "Failed to post question.";
+                    statusEl.style.color = "#f87171";
+                }
+            } catch (err) {
+                console.error("Ask question error:", err);
+                statusEl.textContent = "Server unreachable.";
+                statusEl.style.color = "#f87171";
+            }
+        });
+
+        // Event listeners
+        let debounce;
+        document.getElementById("searchQa").addEventListener("input", () => {
+            clearTimeout(debounce);
+            debounce = setTimeout(fetchQuestions, 300);
+        });
+        document.getElementById("categoryFilter").addEventListener("change", fetchQuestions);
+
+        document.addEventListener("DOMContentLoaded", fetchQuestions);
+    </script>
+
+</body>
+
+</html>

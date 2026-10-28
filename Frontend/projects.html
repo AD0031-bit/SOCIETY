@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon & Projects | THE SOCIETY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-card:hover {
+            border-color: rgba(140, 175, 200, 0.35);
+        }
+
+        .status-pill {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .status-recruiting {
+            background: rgba(74, 222, 128, 0.15);
+            border: 1px solid rgba(74, 222, 128, 0.35);
+            color: #4ade80;
+        }
+
+        .status-progress {
+            background: rgba(90, 160, 208, 0.15);
+            border: 1px solid rgba(90, 160, 208, 0.35);
+            color: #8ec8f0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="societyHeader"></header>
+
+    <main class="app-page">
+
+        <div class="page-header">
+            <div>
+                <span class="hero-tagline">COLLABORATION & TEAMS</span>
+                <h1>Hackathon & <em>Projects</em></h1>
+                <p>Find teammates with complementary skills for Smart India Hackathon, ML projects, and open-source software.</p>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button class="primary-btn" onclick="openCreateModal()">+ Create Team / Project</button>
+                <a href="dashboard.html" class="secondary-btn">← Back</a>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <input
+                type="text"
+                id="searchProj"
+                class="search-input-box"
+                placeholder="Search projects by domain, skills needed (e.g. OpenCV, React, AI), or hackathon..."
+            >
+
+            <select id="domainFilter" class="select-box">
+                <option value="">All Domains</option>
+                <option value="AI">AI & Machine Learning</option>
+                <option value="Web">Web Development</option>
+                <option value="Cloud">Cloud & DevOps</option>
+                <option value="Mobile">Mobile Apps (Flutter/React Native)</option>
+                <option value="IoT">IoT & Hardware</option>
+                <option value="Web3">Web3 & Blockchain</option>
+            </select>
+        </div>
+
+        <!-- Projects Grid -->
+        <div id="projectsGrid" class="cards-grid">
+            <p style="color: var(--text-secondary); grid-column: 1 / -1;">Loading active collaboration teams...</p>
+        </div>
+
+    </main>
+
+    <!-- Create Project Modal -->
+    <div id="createModal" class="modal-backdrop">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCreateModal()">&times;</button>
+            <h2>Create a <em>Project Team</em></h2>
+            <p class="subtitle">Assemble your dream team & earn +15 Community points.</p>
+
+            <form id="createProjectForm">
+                <div class="form-group">
+                    <label for="projTitle">Project / Hackathon Idea Title *</label>
+                    <input type="text" id="projTitle" placeholder="e.g. Smart Campus Navigation & Attendance AI" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projDomain">Domain *</label>
+                        <select id="projDomain" class="select-box" style="width: 100%;">
+                            <option value="AI / Machine Learning">AI / Machine Learning</option>
+                            <option value="Web Development">Web Development (Fullstack)</option>
+                            <option value="Mobile Applications">Mobile Applications</option>
+                            <option value="Cloud / DevOps">Cloud / DevOps</option>
+                            <option value="IoT & Robotics">IoT & Robotics</option>
+                            <option value="Web3 / Fintech">Web3 / Fintech</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projHackathon">Hackathon / Event Target</label>
+                        <input type="text" id="projHackathon" placeholder="e.g. Smart India Hackathon (SIH), ETHIndia, or College Minor Project">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="projSkills">Skills Needed in Teammates (comma separated) *</label>
+                    <input type="text" id="projSkills" placeholder="e.g. React Frontend, OpenCV, Python Backend, UI/UX Designer" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="projDesc">Project Description & Goal *</label>
+                    <textarea id="projDesc" placeholder="Explain the problem statement, intended tech stack, and what role teammates will play..." required></textarea>
+                </div>
+
+                <div id="createStatus" style="font-size: 0.9rem; margin-top: 10px;"></div>
+
+                <div class="btn-row">
+                    <button type="button" class="secondary-btn" onclick="closeCreateModal()">Cancel</button>
+                    <button type="submit" class="primary-btn">Publish Project (+15 pts)</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/navbar.js"></script>
+    <script>
+        const token = localStorage.getItem("societyToken") || "";
+
+        async function fetchProjects() {
+            const search = document.getElementById("searchProj").value.trim();
+            const domain = document.getElementById("domainFilter").value;
+            const grid = document.getElementById("projectsGrid");
+            grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1;">Searching projects...</p>';
+
+            const params = new URLSearchParams();
+            if (search) params.append("search", search);
+            if (domain) params.append("domain", domain);
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/projects?${params.toString()}`);
+                const data = await res.json();
+
+                if (res.ok) {
+                    renderProjects(data.projects || []);
+                } else {
+                    grid.innerHTML = '<p style="color: #f87171; grid-column: 1 / -1;">Failed to load projects.</p>';
+                }
+            } catch (err) {
+                console.error("Projects fetch error:", err);
+                grid.innerHTML = '<p style="color: #f87171; grid-column: 1 / -1;">Server unreachable.</p>';
+            }
+        }
+
+        function renderProjects(list) {
+            const grid = document.getElementById("projectsGrid");
+            grid.innerHTML = "";
+
+            if (list.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border);">
+                        <p style="font-size: 1.1rem; color: var(--text-secondary);">No project teams found matching this filter.</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 6px;">Start your own team and invite peers with complementary skills!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "project-card";
+
+                const isRecruiting = (item.status || "").toLowerCase().includes("looking") || (item.status || "").toLowerCase().includes("recruit");
+                const statusPill = isRecruiting
+                    ? '<span class="status-pill status-recruiting">⚡ Looking for Teammates</span>'
+                    : '<span class="status-pill status-progress">🚀 In Progress</span>';
+
+                const skillsHtml = (item.skillsNeeded || []).map(s => `<span class="skill-tag">${s}</span>`).join("");
+                const membersList = (item.members || [item.leaderName]).join(", ");
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span class="topic-tag">${item.domain}</span>
+                            ${statusPill}
+                        </div>
+
+                        <h3 style="font-size: 1.25rem; margin: 8px 0 4px; font-weight: 500;">${item.title}</h3>
+                        <p style="font-size: 0.88rem; color: #8da8bb; margin-bottom: 12px;">
+                            🏆 <strong>${item.hackathon || 'College Project'}</strong>
+                        </p>
+
+                        <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 14px;">
+                            ${item.description}
+                        </p>
+
+                        <div style="margin-bottom: 14px;">
+                            <span style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;">Skills Needed:</span>
+                            <div class="tags-row" style="margin-top: 6px;">${skillsHtml}</div>
+                        </div>
+
+                        <p style="font-size: 0.8rem; color: var(--text-secondary); background: rgba(0,0,0,0.25); padding: 8px 12px; border-radius: 8px;">
+                            👥 <strong>Team:</strong> ${membersList}
+                        </p>
+                    </div>
+
+                    <div class="card-actions">
+                        <span style="font-size: 0.82rem; color: var(--text-muted);">Led by: <strong>${item.leaderName}</strong></span>
+                        <button class="primary-btn" style="padding: 7px 16px; font-size: 0.85rem;" onclick="joinTeam('${item.id}', '${item.title}')">
+                            Request to Join →
+                        </button>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        async function joinTeam(projectId, projectTitle) {
+            if (!confirm(`Would you like to send a request to join "${projectTitle}"?`)) return;
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/projects/${projectId}/join`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ note: "Interested in collaborating!" })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    alert(`Successfully joined ${projectTitle}! Your name has been added to the team roster.`);
+                    fetchProjects();
+                } else {
+                    alert(data.message || "Failed to join project.");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Server error when joining project.");
+            }
+        }
+
+        function openCreateModal() {
+            document.getElementById("createStatus").textContent = "";
+            document.getElementById("createModal").classList.add("show");
+        }
+
+        function closeCreateModal() {
+            document.getElementById("createModal").classList.remove("show");
+        }
+
+        document.getElementById("createProjectForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const statusEl = document.getElementById("createStatus");
+            statusEl.textContent = "Publishing project...";
+            statusEl.style.color = "var(--text-secondary)";
+
+            const payload = {
+                title: document.getElementById("projTitle").value.trim(),
+                domain: document.getElementById("projDomain").value,
+                hackathon: document.getElementById("projHackathon").value.trim(),
+                skillsNeeded: document.getElementById("projSkills").value.trim(),
+                description: document.getElementById("projDesc").value.trim()
+            };
+
+            try {
+                const res = await fetch("http://localhost:5000/api/projects", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    statusEl.textContent = "Project team created! (+15 reputation points earned)";
+                    statusEl.style.color = "#4ade80";
+                    setTimeout(() => {
+                        closeCreateModal();
+                        document.getElementById("createProjectForm").reset();
+                        fetchProjects();
+                    }, 800);
+                } else {
+                    statusEl.textContent = data.message || "Failed to create project.";
+                    statusEl.style.color = "#f87171";
+                }
+            } catch (err) {
+                console.error("Submit project error:", err);
+                statusEl.textContent = "Server unreachable.";
+                statusEl.style.color = "#f87171";
+            }
+        });
+
+        // Event listeners
+        let debounce;
+        document.getElementById("searchProj").addEventListener("input", () => {
+            clearTimeout(debounce);
+            debounce = setTimeout(fetchProjects, 300);
+        });
+        document.getElementById("domainFilter").addEventListener("change", fetchProjects);
+
+        document.addEventListener("DOMContentLoaded", fetchProjects);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opportunities & Referrals | THE SOCIETY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .opp-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .opp-card:hover {
+            border-color: rgba(140, 175, 200, 0.35);
+        }
+
+        .opp-type-badge {
+            background: rgba(90, 160, 208, 0.18);
+            border: 1px solid rgba(130, 190, 230, 0.35);
+            color: #8ec8f0;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .opp-referral-tag {
+            background: rgba(234, 179, 8, 0.15);
+            border: 1px solid rgba(234, 179, 8, 0.35);
+            color: #facc15;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="societyHeader"></header>
+
+    <main class="app-page">
+
+        <div class="page-header">
+            <div>
+                <span class="hero-tagline">CAREER ACCELERATION</span>
+                <h1>Opportunities & <em>Referrals</em></h1>
+                <p>Verified internships, early-career roles, and employee referrals posted directly by college seniors & alumni.</p>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button class="primary-btn" onclick="openPostModal()">+ Post Opportunity</button>
+                <a href="dashboard.html" class="secondary-btn">← Back</a>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <input
+                type="text"
+                id="searchOpp"
+                class="search-input-box"
+                placeholder="Search by role, company (e.g. Microsoft, CRED, Google), or location..."
+            >
+
+            <select id="typeFilter" class="select-box">
+                <option value="">All Opportunity Types</option>
+                <option value="Internship">Internships</option>
+                <option value="Referral">Direct Referrals</option>
+                <option value="Full-time">Full-time Roles</option>
+            </select>
+        </div>
+
+        <!-- Opportunities Grid -->
+        <div id="oppsGrid" class="cards-grid">
+            <p style="color: var(--text-secondary); grid-column: 1 / -1;">Loading verified opportunities...</p>
+        </div>
+
+    </main>
+
+    <!-- Post Opportunity Modal -->
+    <div id="postModal" class="modal-backdrop">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePostModal()">&times;</button>
+            <h2>Share an <em>Opportunity</em></h2>
+            <p class="subtitle">Help college peers & earn +20 Community Reputation points.</p>
+
+            <form id="postOppForm">
+                <div class="form-group">
+                    <label for="oppTitle">Role / Opening Title *</label>
+                    <input type="text" id="oppTitle" placeholder="e.g. Software Engineer Intern - Summer 2027" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="oppCompany">Company / Organization *</label>
+                        <input type="text" id="oppCompany" placeholder="e.g. Google, Microsoft, Startup" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="oppType">Opportunity Type *</label>
+                        <select id="oppType" class="select-box" style="width: 100%;">
+                            <option value="Internship">Internship</option>
+                            <option value="Referral">Employee Referral</option>
+                            <option value="Full-time">Full-time Job</option>
+                            <option value="Research">Research Fellowship</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="oppLocation">Location</label>
+                        <input type="text" id="oppLocation" placeholder="e.g. Bengaluru / Remote">
+                    </div>
+                    <div class="form-group">
+                        <label for="oppStipend">Stipend / Compensation</label>
+                        <input type="text" id="oppStipend" placeholder="e.g. ₹80,000 / month or Competitive">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="oppDeadline">Application Deadline</label>
+                        <input type="text" id="oppDeadline" placeholder="e.g. March 15, 2027">
+                    </div>
+                    <div class="form-group">
+                        <label for="oppLink">Application Link / Portal</label>
+                        <input type="url" id="oppLink" placeholder="https://careers.company.com/apply">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="oppDesc">Eligibility & Details *</label>
+                    <textarea id="oppDesc" placeholder="Describe eligibility criteria (eligible branches, graduation years), interview process, or referral steps..." required></textarea>
+                </div>
+
+                <div style="margin: 12px 0;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="oppReferralAvailable">
+                        <span>I can provide internal employee referral for strong candidates</span>
+                    </label>
+                </div>
+
+                <div id="oppStatus" style="font-size: 0.9rem; margin-top: 10px;"></div>
+
+                <div class="btn-row">
+                    <button type="button" class="secondary-btn" onclick="closePostModal()">Cancel</button>
+                    <button type="submit" class="primary-btn">Publish Opportunity (+20 pts)</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/navbar.js"></script>
+    <script>
+        const token = localStorage.getItem("societyToken") || "";
+
+        async function fetchOpportunities() {
+            const search = document.getElementById("searchOpp").value.trim();
+            const type = document.getElementById("typeFilter").value;
+            const grid = document.getElementById("oppsGrid");
+            grid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1;">Searching opportunities...</p>';
+
+            const params = new URLSearchParams();
+            if (search) params.append("search", search);
+            if (type) params.append("type", type);
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/opportunities?${params.toString()}`);
+                const data = await res.json();
+
+                if (res.ok) {
+                    renderOpportunities(data.opportunities || []);
+                } else {
+                    grid.innerHTML = '<p style="color: #f87171; grid-column: 1 / -1;">Failed to load opportunities.</p>';
+                }
+            } catch (err) {
+                console.error("Opportunities fetch error:", err);
+                grid.innerHTML = '<p style="color: #f87171; grid-column: 1 / -1;">Server unreachable.</p>';
+            }
+        }
+
+        function renderOpportunities(list) {
+            const grid = document.getElementById("oppsGrid");
+            grid.innerHTML = "";
+
+            if (list.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border);">
+                        <p style="font-size: 1.1rem; color: var(--text-secondary);">No opportunities found matching this filter.</p>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 6px;">Be the first to share an opportunity with the community!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "opp-card";
+
+                const referralBadge = item.referralAvailable
+                    ? '<span class="opp-referral-tag">🤝 Referral Available</span>'
+                    : '';
+
+                card.innerHTML = `
+                    <div class="card-top">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span class="opp-type-badge">${item.type.toUpperCase()}</span>
+                            ${referralBadge}
+                        </div>
+
+                        <h3 style="font-size: 1.22rem; margin: 8px 0 4px; font-weight: 500;">${item.title}</h3>
+                        <p style="font-size: 0.92rem; color: #8da8bb; margin-bottom: 10px;">
+                            <strong>${item.company}</strong> · 📍 ${item.location || 'Remote'}
+                        </p>
+
+                        <div style="display: flex; gap: 14px; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 12px; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px;">
+                            <span>💰 ${item.stipend || 'Disclosed on apply'}</span>
+                            <span>⏳ Deadline: ${item.deadline || 'Open'}</span>
+                        </div>
+
+                        <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 16px;">
+                            ${item.description}
+                        </p>
+
+                        <p style="font-size: 0.8rem; color: var(--text-secondary);">
+                            Shared by: <strong>${item.postedBy}</strong> (${item.postedByRole || 'Senior/Alumni'})
+                        </p>
+                    </div>
+
+                    <div class="card-actions">
+                        ${item.link && item.link !== '#' ? `
+                            <a href="${item.link}" target="_blank" class="primary-btn" style="padding: 7px 16px; font-size: 0.85rem;">
+                                Apply Now ↗
+                            </a>
+                        ` : `
+                            <button class="secondary-btn" style="padding: 7px 16px; font-size: 0.85rem;" onclick="alert('Reach out to ' + '${item.postedBy}' + ' through the Community Network tab!')">
+                                Contact Referrer
+                            </button>
+                        `}
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function openPostModal() {
+            document.getElementById("oppStatus").textContent = "";
+            document.getElementById("postModal").classList.add("show");
+        }
+
+        function closePostModal() {
+            document.getElementById("postModal").classList.remove("show");
+        }
+
+        document.getElementById("postOppForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const statusEl = document.getElementById("oppStatus");
+            statusEl.textContent = "Publishing opportunity...";
+            statusEl.style.color = "var(--text-secondary)";
+
+            const payload = {
+                title: document.getElementById("oppTitle").value.trim(),
+                company: document.getElementById("oppCompany").value.trim(),
+                type: document.getElementById("oppType").value,
+                location: document.getElementById("oppLocation").value.trim(),
+                stipend: document.getElementById("oppStipend").value.trim(),
+                deadline: document.getElementById("oppDeadline").value.trim(),
+                link: document.getElementById("oppLink").value.trim(),
+                description: document.getElementById("oppDesc").value.trim(),
+                referralAvailable: document.getElementById("oppReferralAvailable").checked
+            };
+
+            try {
+                const res = await fetch("http://localhost:5000/api/opportunities", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    statusEl.textContent = "Opportunity posted! (+20 reputation points earned)";
+                    statusEl.style.color = "#4ade80";
+                    setTimeout(() => {
+                        closePostModal();
+                        document.getElementById("postOppForm").reset();
+                        fetchOpportunities();
+                    }, 800);
+                } else {
+                    statusEl.textContent = data.message || "Failed to post opportunity.";
+                    statusEl.style.color = "#f87171";
+                }
+            } catch (err) {
+                console.error("Submit opp error:", err);
+                statusEl.textContent = "Server unreachable.";
+                statusEl.style.color = "#f87171";
+            }
+        });
+
+        // Event listeners
+        let debounce;
+        document.getElementById("searchOpp").addEventListener("input", () => {
+            clearTimeout(debounce);
+            debounce = setTimeout(fetchOpportunities, 300);
+        });
+        document.getElementById("typeFilter").addEventListener("change", fetchOpportunities);
+
+        document.addEventListener("DOMContentLoaded", fetchOpportunities);
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+[
+  {
+    "id": "proj-1793185149087",
+    "members": [
+      "Test Developer"
+    ],
+    "createdAt": "2026-10-28T10:59:09.087Z",
+    "title": "Campus Ride Sharing & Carpool",
+    "domain": "Mobile Applications",
+    "hackathon": "College Tech Fest 2027",
+    "status": "Looking for Teammates",
+    "description": "Peer carpooling app for day scholars and hostelers.",
+    "skillsNeeded": [
+      "Flutter",
+      "Firebase",
+      "UI/UX"
+    ],
+    "leaderName": "Test Developer",
+    "leaderId": "user-1793185148986",
+    "leaderRole": "student"
+  },
+  {
+    "id": "proj-1",
+    "title": "Smart Campus Autonomous Attendance & Nav AI",
+    "domain": "AI / Computer Vision",
+    "status": "Looking for Teammates",
+    "hackathon": "Smart India Hackathon (SIH)",
+    "description": "Building an edge-device facial recognition and classroom navigation system for college students and faculty.",
+    "skillsNeeded": [
+      "Python",
+      "OpenCV",
+      "FastAPI",
+      "React Frontend"
+    ],
+    "leaderName": "Arjun Verma",
+    "leaderId": "user-3",
+    "members": [
+      "Arjun Verma (Lead / Backend)",
+      "Rohan Das (Student)"
+    ],
+    "createdAt": "2026-10-28T10:48:29.238Z"
+  },
+  {
+    "id": "proj-2",
+    "title": "Decentralized Peer Study Resource Network",
+    "domain": "Web3 / Cloud",
+    "status": "In Progress",
+    "hackathon": "ETHIndia Hackathon",
+    "description": "A censorship-resistant notes and PYQ (Previous Year Questions) sharing portal with micropayments for top contributors.",
+    "skillsNeeded": [
+      "Solidity",
+      "Tailwind CSS",
+      "IPFS",
+      "Node.js"
+    ],
+    "leaderName": "Rahul Sharma",
+    "leaderId": "user-1",
+    "members": [
+      "Rahul Sharma (Lead)",
+      "Aditi Singh (UI/UX)"
+    ],
+    "createdAt": "2026-10-28T10:48:29.238Z"
+  }
+]

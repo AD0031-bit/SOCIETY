@@ -1,0 +1,31 @@
+[
+  {
+    "id": "ment-1",
+    "menteeId": "user-3",
+    "menteeName": "Arjun Verma",
+    "menteeRole": "Senior",
+    "mentorId": "user-2",
+    "mentorName": "Ananya Mehta",
+    "topic": "Referral Prep & Microsoft Interview Loop",
+    "message": "Hi Ananya ma'am, I have my interview next month. Would love 30 minutes of guidance on system design expectations.",
+    "status": "accepted",
+    "notes": "Scheduled Google Meet on Sunday 4 PM",
+    "createdAt": "2026-10-28T10:48:29.240Z"
+  },
+  {
+    "id": "ment-1793185149059",
+    "status": "pending",
+    "createdAt": "2026-10-28T10:59:09.059Z",
+    "menteeId": "user-1793185148986",
+    "menteeName": "Test Developer",
+    "menteeEmail": "dev_1793185148728@college.edu",
+    "menteeRole": "student",
+    "mentorId": "user-1",
+    "mentorName": "Rahul Sharma",
+    "mentorEmail": "rahul.sharma@college.edu",
+    "mentorRole": "senior",
+    "topic": "DSA & System Design Strategy",
+    "message": "Would love 20 minutes to review my resume and SDE prep roadmap.",
+    "preferredTime": "Flexible"
+  }
+]

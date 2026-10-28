@@ -1,0 +1,210 @@
+[
+  {
+    "id": "user-1",
+    "name": "Rahul Sharma",
+    "email": "rahul.sharma@college.edu",
+    "password": "$2b$10$VDSyKJWU0EEoPKZxL2Xhhu2mXowqKwlrmjc8h9GMd5TmXn9LhJG3W",
+    "role": "senior",
+    "college": "Engineering College of Technology",
+    "branch": "CSE",
+    "gradYear": "2027",
+    "bio": "Final year CSE undergrad. Interned at Google Cloud. Passionate about Distributed Systems, DSA, and mentoring juniors for placement season.",
+    "skills": [
+      "C++",
+      "DSA",
+      "Distributed Systems",
+      "Go",
+      "Docker"
+    ],
+    "interests": [
+      "System Design",
+      "Cloud Infrastructure",
+      "Competitive Programming"
+    ],
+    "github": "https://github.com",
+    "linkedin": "https://linkedin.com",
+    "isMentorAvailable": true,
+    "mentorBio": "Available for DSA interview prep, resume reviews, and off-campus placement guidance.",
+    "mentorTopics": [
+      "DSA & LeetCode",
+      "Off-Campus Placement",
+      "Resume Review"
+    ],
+    "reputation": 185,
+    "badges": [
+      "Top Mentor",
+      "Placement Guide",
+      "Verified Senior"
+    ],
+    "createdAt": "2026-10-28T10:48:29.225Z"
+  },
+  {
+    "id": "user-2",
+    "name": "Ananya Mehta",
+    "email": "ananya.mehta@alumni.edu",
+    "password": "$2b$10$VDSyKJWU0EEoPKZxL2Xhhu2mXowqKwlrmjc8h9GMd5TmXn9LhJG3W",
+    "role": "alumni",
+    "college": "Engineering College of Technology",
+    "branch": "ECE",
+    "gradYear": "2025",
+    "bio": "Software Engineer at Microsoft. Previously SIH finalist and open-source contributor. Happy to refer deserving college students.",
+    "skills": [
+      "Python",
+      "PyTorch",
+      "FastAPI",
+      "Azure",
+      "Machine Learning"
+    ],
+    "interests": [
+      "Generative AI",
+      "Edge Computing",
+      "Career Mentorship"
+    ],
+    "github": "https://github.com",
+    "linkedin": "https://linkedin.com",
+    "isMentorAvailable": true,
+    "mentorBio": "Mentoring students interested in transitioning from core branches (ECE/EE) into High-Scale Software Engineering.",
+    "mentorTopics": [
+      "Non-CS to Tech Transition",
+      "Referral Prep",
+      "Industry System Design"
+    ],
+    "reputation": 340,
+    "badges": [
+      "Distinguished Alumni",
+      "Top Mentor",
+      "Referral Partner"
+    ],
+    "createdAt": "2026-10-28T10:48:29.234Z"
+  },
+  {
+    "id": "user-3",
+    "name": "Arjun Verma",
+    "email": "arjun.verma@college.edu",
+    "password": "$2b$10$VDSyKJWU0EEoPKZxL2Xhhu2mXowqKwlrmjc8h9GMd5TmXn9LhJG3W",
+    "role": "senior",
+    "college": "Engineering College of Technology",
+    "branch": "IT",
+    "gradYear": "2027",
+    "bio": "Lead of College Developer Club. Fullstack developer with MERN & DevOps experience. Built multiple hackathon-winning products.",
+    "skills": [
+      "React",
+      "Node.js",
+      "PostgreSQL",
+      "AWS",
+      "Next.js"
+    ],
+    "interests": [
+      "Hackathons",
+      "Product Development",
+      "Open Source"
+    ],
+    "github": "https://github.com",
+    "linkedin": "https://linkedin.com",
+    "isMentorAvailable": true,
+    "mentorBio": "Ready to guide hackathon teams and project architecture.",
+    "mentorTopics": [
+      "Hackathons Strategy",
+      "Fullstack Architecture",
+      "Web Dev"
+    ],
+    "reputation": 145,
+    "badges": [
+      "Hackathon Pro",
+      "Core Contributor"
+    ],
+    "createdAt": "2026-10-28T10:48:29.234Z"
+  },
+  {
+    "id": "user-4",
+    "name": "Priya Kapoor",
+    "email": "priya.kapoor@alumni.edu",
+    "password": "$2b$10$VDSyKJWU0EEoPKZxL2Xhhu2mXowqKwlrmjc8h9GMd5TmXn9LhJG3W",
+    "role": "alumni",
+    "college": "Engineering College of Technology",
+    "branch": "CSE",
+    "gradYear": "2024",
+    "bio": "DevOps / SRE Engineer at Uber. Organizing weekly college mock interviews and career webinars.",
+    "skills": [
+      "Kubernetes",
+      "Linux",
+      "Terraform",
+      "Go",
+      "AWS"
+    ],
+    "interests": [
+      "Site Reliability",
+      "Cloud Native",
+      "Public Speaking"
+    ],
+    "github": "https://github.com",
+    "linkedin": "https://linkedin.com",
+    "isMentorAvailable": true,
+    "mentorBio": "Offering mock technical interviews and SRE/DevOps roadmap coaching.",
+    "mentorTopics": [
+      "DevOps / Cloud Roadmap",
+      "Mock Interviews"
+    ],
+    "reputation": 290,
+    "badges": [
+      "Distinguished Alumni",
+      "Community Champion"
+    ],
+    "createdAt": "2026-10-28T10:48:29.234Z"
+  },
+  {
+    "id": "user-1793185148986",
+    "college": "Engineering College of Technology",
+    "branch": "CSE",
+    "gradYear": "2027",
+    "bio": "Fullstack enthusiast interested in Next.js, Cloud, and SIH 2027.",
+    "skills": [
+      "JavaScript",
+      "React",
+      "Node.js",
+      "Docker"
+    ],
+    "interests": [],
+    "github": "https://github.com/testdev",
+    "linkedin": "",
+    "isMentorAvailable": false,
+    "mentorBio": "",
+    "mentorTopics": [],
+    "reputation": 70,
+    "badges": [
+      "New Member",
+      "Opportunity Provider",
+      "Hackathon Builder",
+      "Knowledge Sharer"
+    ],
+    "createdAt": "2026-10-28T10:59:08.987Z",
+    "name": "Test Developer",
+    "email": "dev_1793185148728@college.edu",
+    "password": "$2b$10$E1jJ7F3V11R.6k4tR2Rw2.PciMUsuAYx4caEeC/aQ9D.zonl.Qbgy",
+    "role": "student",
+    "updatedAt": "2026-10-28T10:59:09.024Z"
+  },
+  {
+    "id": "user-1793185616835",
+    "college": "Engineering College of Technology",
+    "branch": "CSE",
+    "gradYear": "2027",
+    "bio": "",
+    "skills": [],
+    "interests": [],
+    "github": "",
+    "linkedin": "",
+    "isMentorAvailable": false,
+    "mentorBio": "",
+    "mentorTopics": [],
+    "reputation": 20,
+    "badges": [
+      "New Member"
+    ],
+    "createdAt": "2026-10-28T11:06:56.835Z",
+    "name": "Aastha Dua",
+    "email": "aasthadua09@gmail.com",
+    "password": "$2b$10$DR9Z2wguLud2.BTJAGzAyuKLzz75k38459b1NUOVtxkxsxf8RYeyi",
+    "role": "student"
+  }
+]
